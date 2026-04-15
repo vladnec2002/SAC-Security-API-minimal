@@ -1,0 +1,26 @@
+$kind: http-request
+name: POST Car malicios
+url: "{{baseGateway}}/gateway/private/cars"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"brand\": \"<script>alert(1)</script>\",\r
+
+    \  \"model\": \"X5\",\r
+
+    \  \"year\": 2020,\r
+
+    \  \"price\": 35000,\r
+
+    \  \"sellerName\": \"Alex\",\r
+
+    \  \"description\": \"hack\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt}}"
+order: 4081788920770639

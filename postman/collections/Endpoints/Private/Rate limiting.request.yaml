@@ -1,0 +1,5 @@
+$kind: http-request
+name: Rate limiting
+url: "{{baseGateway}}/gateway/public/cars"
+method: GET
+order: 4229735353216756

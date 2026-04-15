@@ -1,7 +1,7 @@
 package com.example.gateway_service.controller;
 
 import com.example.gateway_service.security.InputSanitizer;
-import com.example.gatewayservice.security.JwtUtil;
+import com.example.gateway_service.security.JwtUtil;
 import com.example.gateway_service.security.RateLimiterService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;

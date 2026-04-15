@@ -1,0 +1,26 @@
+$kind: http-request
+name: POST Car
+url: "{{baseGateway}}/gateway/private/cars"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"brand\": \"BMW\",\r
+
+    \  \"model\": \"X5\",\r
+
+    \  \"year\": 2020,\r
+
+    \  \"price\": 35000,\r
+
+    \  \"sellerName\": \"Alex\",\r
+
+    \  \"description\": \"Masina impecabila\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt}}"
+order: 3334463349749892

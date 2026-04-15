@@ -1,0 +1,5 @@
+$kind: http-request
+name: Get cars
+url: "{{baseGateway}}/gateway/public/cars"
+method: GET
+order: 1776280513432

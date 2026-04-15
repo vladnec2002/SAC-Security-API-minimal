@@ -1,0 +1,22 @@
+$kind: http-request
+name: Send message malicios
+url: "{{baseGateway}}/gateway/private/messages"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"carId\": 1,\r
+
+    \  \"senderName\": \"Ion\",\r
+
+    \  \"email\": \"test@test.com\",\r
+
+    \  \"message\": \"<script>alert('hack')</script>\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: "{{jwt}}"
+order: 4153572805988417

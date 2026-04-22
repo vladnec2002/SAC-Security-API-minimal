@@ -1,39 +1,14 @@
 package com.example.backend_service.model;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "cars")
-public class Car {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class CarRequest {
     private String brand;
     private String model;
     private int year;
     private double price;
     private String description;
+    private Long ownerId;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private User owner;
-
-    public Car() {
-    }
-
-    public Car(String brand, String model, int year, double price, String description, User owner) {
-        this.brand = brand;
-        this.model = model;
-        this.year = year;
-        this.price = price;
-        this.description = description;
-        this.owner = owner;
-    }
-
-    public Long getId() {
-        return id;
+    public CarRequest() {
     }
 
     public String getBrand() {
@@ -56,12 +31,8 @@ public class Car {
         return description;
     }
 
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public Long getOwnerId() {
+        return ownerId;
     }
 
     public void setBrand(String brand) {
@@ -84,7 +55,7 @@ public class Car {
         this.description = description;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
     }
 }

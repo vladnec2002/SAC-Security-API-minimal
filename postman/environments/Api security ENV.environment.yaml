@@ -1,2 +1,8 @@
 name: Api security ENV
-values: []
+values:
+  - key: baseGateway
+    enabled: true
+    value: ''
+  - key: jwt
+    enabled: true
+    value: ''

@@ -1,6 +1,6 @@
 package com.example.backend_service.controller;
 
-import com.example.backend_service.model.Car;
+import com.example.backend_service.model.CarRequest;
 import com.example.backend_service.model.MessageRequest;
 import com.example.backend_service.service.CarService;
 import org.springframework.http.ResponseEntity;
@@ -31,17 +31,27 @@ public class CarController {
     }
 
     @PostMapping("/private/cars")
-    public ResponseEntity<?> addCar(@RequestBody Car car) {
-        return ResponseEntity.ok(carService.addCar(car));
+    public ResponseEntity<?> addCar(@RequestBody CarRequest request) {
+        return carService.addCar(request)
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest().body(Map.of("error", "Owner not found")));
+    }
+
+    @GetMapping("/private/my-cars")
+    public ResponseEntity<?> getMyCars(@RequestParam Long ownerId) {
+        return ResponseEntity.ok(carService.getCarsByOwnerId(ownerId));
     }
 
     @PostMapping("/private/messages")
     public ResponseEntity<?> sendMessage(@RequestBody MessageRequest request) {
-        return ResponseEntity.ok(Map.of(
-                "status", "Message sent",
-                "carId", request.getCarId(),
-                "senderName", request.getSenderName()
-        ));
+        return carService.sendMessage(request)
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest().body(Map.of("error", "Car or sender not found")));
+    }
+
+    @GetMapping("/private/messages/received")
+    public ResponseEntity<?> getReceivedMessages(@RequestParam Long userId) {
+        return ResponseEntity.ok(carService.getReceivedMessages(userId));
     }
 
     @GetMapping("/private/profile")

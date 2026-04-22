@@ -1,36 +1,82 @@
 package com.example.backend_service.service;
 
-import com.example.backend_service.model.Car;
+import com.example.backend_service.model.*;
+import com.example.backend_service.repository.CarRepository;
+import com.example.backend_service.repository.MessageRepository;
+import com.example.backend_service.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class CarService {
 
-    private final List<Car> cars = new ArrayList<>();
-    private final AtomicLong idGenerator = new AtomicLong(3);
+    private final CarRepository carRepository;
+    private final UserRepository userRepository;
+    private final MessageRepository messageRepository;
 
-    public CarService() {
-        cars.add(new Car(1L, "BMW", "320d", 2018, 16500, "Andrei", "Masina bine intretinuta, fara accidente."));
-        cars.add(new Car(2L, "Audi", "A4", 2017, 14900, "Mihai", "Revizii la zi, stare foarte buna."));
-        cars.add(new Car(3L, "Volkswagen", "Passat", 2019, 17800, "Cristian", "Unic proprietar, kilometri reali."));
+    public CarService(CarRepository carRepository,
+                      UserRepository userRepository,
+                      MessageRepository messageRepository) {
+        this.carRepository = carRepository;
+        this.userRepository = userRepository;
+        this.messageRepository = messageRepository;
     }
 
     public List<Car> getAllCars() {
-        return cars;
+        return carRepository.findAll();
     }
 
     public Optional<Car> getCarById(Long id) {
-        return cars.stream().filter(car -> car.getId().equals(id)).findFirst();
+        return carRepository.findById(id);
     }
 
-    public Car addCar(Car car) {
-        car.setId(idGenerator.incrementAndGet());
-        cars.add(car);
-        return car;
+    public Optional<Car> addCar(CarRequest request) {
+        Optional<User> ownerOptional = userRepository.findById(request.getOwnerId());
+        if (ownerOptional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Car car = new Car(
+                request.getBrand(),
+                request.getModel(),
+                request.getYear(),
+                request.getPrice(),
+                request.getDescription(),
+                ownerOptional.get()
+        );
+
+        return Optional.of(carRepository.save(car));
+    }
+
+    public List<Car> getCarsByOwnerId(Long ownerId) {
+        return carRepository.findByOwnerId(ownerId);
+    }
+
+    public Optional<Message> sendMessage(MessageRequest request) {
+        Optional<Car> carOptional = carRepository.findById(request.getCarId());
+        Optional<User> senderOptional = userRepository.findById(request.getSenderId());
+
+        if (carOptional.isEmpty() || senderOptional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Car car = carOptional.get();
+        User sender = senderOptional.get();
+        User receiver = car.getOwner();
+
+        Message message = new Message(
+                request.getContent(),
+                car,
+                sender,
+                receiver
+        );
+
+        return Optional.of(messageRepository.save(message));
+    }
+
+    public List<Message> getReceivedMessages(Long userId) {
+        return messageRepository.findByReceiverId(userId);
     }
 }

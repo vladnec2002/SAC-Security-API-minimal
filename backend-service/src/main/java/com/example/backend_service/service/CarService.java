@@ -32,8 +32,9 @@ public class CarService {
         return carRepository.findById(id);
     }
 
-    public Optional<Car> addCar(CarRequest request) {
-        Optional<User> ownerOptional = userRepository.findById(request.getOwnerId());
+    public Optional<Car> addCarForAuthenticatedUser(CarRequest request, String username) {
+        Optional<User> ownerOptional = userRepository.findByUsername(username);
+
         if (ownerOptional.isEmpty()) {
             return Optional.empty();
         }
@@ -50,13 +51,18 @@ public class CarService {
         return Optional.of(carRepository.save(car));
     }
 
-    public List<Car> getCarsByOwnerId(Long ownerId) {
-        return carRepository.findByOwnerId(ownerId);
+    public List<Car> getCarsByUsername(String username) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (userOptional.isEmpty()) {
+            return List.of();
+        }
+
+        return carRepository.findByOwnerId(userOptional.get().getId());
     }
 
-    public Optional<Message> sendMessage(MessageRequest request) {
+    public Optional<Message> sendMessageFromAuthenticatedUser(MessageRequest request, String username) {
         Optional<Car> carOptional = carRepository.findById(request.getCarId());
-        Optional<User> senderOptional = userRepository.findById(request.getSenderId());
+        Optional<User> senderOptional = userRepository.findByUsername(username);
 
         if (carOptional.isEmpty() || senderOptional.isEmpty()) {
             return Optional.empty();
@@ -76,7 +82,12 @@ public class CarService {
         return Optional.of(messageRepository.save(message));
     }
 
-    public List<Message> getReceivedMessages(Long userId) {
-        return messageRepository.findByReceiverId(userId);
+    public List<Message> getReceivedMessagesByUsername(String username) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (userOptional.isEmpty()) {
+            return List.of();
+        }
+
+        return messageRepository.findByReceiverId(userOptional.get().getId());
     }
 }

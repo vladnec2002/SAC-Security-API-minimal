@@ -4,6 +4,7 @@ import com.example.backend_service.model.CarRequest;
 import com.example.backend_service.model.MessageRequest;
 import com.example.backend_service.service.CarService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -31,33 +32,39 @@ public class CarController {
     }
 
     @PostMapping("/private/cars")
-    public ResponseEntity<?> addCar(@RequestBody CarRequest request) {
-        return carService.addCar(request)
+    public ResponseEntity<?> addCar(@RequestBody CarRequest request, Authentication authentication) {
+        String username = authentication.getName();
+
+        return carService.addCarForAuthenticatedUser(request, username)
                 .<ResponseEntity<?>>map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.badRequest().body(Map.of("error", "Owner not found")));
     }
 
     @GetMapping("/private/my-cars")
-    public ResponseEntity<?> getMyCars(@RequestParam Long ownerId) {
-        return ResponseEntity.ok(carService.getCarsByOwnerId(ownerId));
+    public ResponseEntity<?> getMyCars(Authentication authentication) {
+        String username = authentication.getName();
+        return ResponseEntity.ok(carService.getCarsByUsername(username));
     }
 
     @PostMapping("/private/messages")
-    public ResponseEntity<?> sendMessage(@RequestBody MessageRequest request) {
-        return carService.sendMessage(request)
+    public ResponseEntity<?> sendMessage(@RequestBody MessageRequest request, Authentication authentication) {
+        String username = authentication.getName();
+
+        return carService.sendMessageFromAuthenticatedUser(request, username)
                 .<ResponseEntity<?>>map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.badRequest().body(Map.of("error", "Car or sender not found")));
     }
 
     @GetMapping("/private/messages/received")
-    public ResponseEntity<?> getReceivedMessages(@RequestParam Long userId) {
-        return ResponseEntity.ok(carService.getReceivedMessages(userId));
+    public ResponseEntity<?> getReceivedMessages(Authentication authentication) {
+        String username = authentication.getName();
+        return ResponseEntity.ok(carService.getReceivedMessagesByUsername(username));
     }
 
     @GetMapping("/private/profile")
-    public ResponseEntity<?> getProfile() {
+    public ResponseEntity<?> getProfile(Authentication authentication) {
         return ResponseEntity.ok(Map.of(
-                "username", "demo-user",
+                "username", authentication.getName(),
                 "role", "USER"
         ));
     }

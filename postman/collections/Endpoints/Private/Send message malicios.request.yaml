@@ -8,11 +8,7 @@ body:
 
     \  \"carId\": 1,\r
 
-    \  \"senderName\": \"Ion\",\r
-
-    \  \"email\": \"test@test.com\",\r
-
-    \  \"message\": \"<script>alert('hack')</script>\"\r
+    \  \"content\": \"<script>alert('xss')</script>\"\r
 
     }"
 auth:

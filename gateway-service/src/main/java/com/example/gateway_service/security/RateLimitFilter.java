@@ -29,8 +29,9 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
         boolean isPrivate = path.startsWith("/gateway/private/");
         boolean isPublic = path.startsWith("/gateway/public/");
+        boolean isAuth = path.startsWith("/gateway/auth/");
 
-        if (!isPrivate && !isPublic) {
+        if (!isPrivate && !isPublic && !isAuth) {
             filterChain.doFilter(request, response);
             return;
         }

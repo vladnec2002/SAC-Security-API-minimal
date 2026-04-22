@@ -115,6 +115,67 @@ public class GatewayController {
         );
     }
 
+    @PostMapping("/auth/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, Object> body) {
+        if (!inputSanitizer.isSafe(body)) {
+            return badRequest();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+
+        return restTemplate.exchange(
+                backendBaseUrl + "/api/auth/login",
+                HttpMethod.POST,
+                entity,
+                String.class
+        );
+    }
+
+    @GetMapping("/private/my-cars")
+    public ResponseEntity<?> getMyCars(
+            @RequestHeader(value = "Authorization", required = false) String authHeader
+    ) {
+        if (!checkJwt(authHeader)) {
+            return unauthorized();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(extractToken(authHeader));
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        return restTemplate.exchange(
+                backendBaseUrl + "/api/private/my-cars",
+                HttpMethod.GET,
+                entity,
+                String.class
+        );
+    }
+
+    @GetMapping("/private/messages/received")
+    public ResponseEntity<?> getReceivedMessages(
+            @RequestHeader(value = "Authorization", required = false) String authHeader
+    ) {
+        if (!checkJwt(authHeader)) {
+            return unauthorized();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(extractToken(authHeader));
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        return restTemplate.exchange(
+                backendBaseUrl + "/api/private/messages/received",
+                HttpMethod.GET,
+                entity,
+                String.class
+        );
+    }
+
     private boolean checkJwt(String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return false;

@@ -6,7 +6,6 @@ public class CarRequest {
     private int year;
     private double price;
     private String description;
-    private Long ownerId;
 
     public CarRequest() {
     }
@@ -31,10 +30,6 @@ public class CarRequest {
         return description;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
-    }
-
     public void setBrand(String brand) {
         this.brand = brand;
     }
@@ -53,9 +48,5 @@ public class CarRequest {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
     }
 }

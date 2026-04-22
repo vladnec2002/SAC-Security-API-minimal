@@ -9,6 +9,7 @@ import com.example.backend_service.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class DataLoader {
@@ -16,18 +17,40 @@ public class DataLoader {
     @Bean
     CommandLineRunner loadData(UserRepository userRepository,
                                CarRepository carRepository,
-                               MessageRepository messageRepository) {
+                               MessageRepository messageRepository,
+                               PasswordEncoder passwordEncoder) {
         return args -> {
 
             if (userRepository.count() == 0) {
 
-                // ===== USERS =====
-                User u1 = userRepository.save(new User("andrei", "andrei@mail.com"));
-                User u2 = userRepository.save(new User("mihai", "mihai@mail.com"));
-                User u3 = userRepository.save(new User("alex", "alex@mail.com"));
-                User u4 = userRepository.save(new User("ion", "ion@mail.com"));
+                User u1 = userRepository.save(new User(
+                        "andrei",
+                        "andrei@mail.com",
+                        passwordEncoder.encode("1234"),
+                        "USER"
+                ));
 
-                // ===== CARS =====
+                User u2 = userRepository.save(new User(
+                        "mihai",
+                        "mihai@mail.com",
+                        passwordEncoder.encode("1234"),
+                        "USER"
+                ));
+
+                User u3 = userRepository.save(new User(
+                        "alex",
+                        "alex@mail.com",
+                        passwordEncoder.encode("1234"),
+                        "USER"
+                ));
+
+                User u4 = userRepository.save(new User(
+                        "ion",
+                        "ion@mail.com",
+                        passwordEncoder.encode("1234"),
+                        "USER"
+                ));
+
                 Car c1 = carRepository.save(new Car(
                         "BMW", "320d", 2018, 16500,
                         "Masina bine intretinuta", u1));
@@ -48,9 +71,6 @@ public class DataLoader {
                         "Skoda", "Octavia", 2015, 9500,
                         "Foarte fiabila", u4));
 
-                // ===== MESSAGES =====
-
-                // mihai -> andrei despre BMW
                 messageRepository.save(new Message(
                         "Salut, masina mai este disponibila?",
                         c1,
@@ -58,7 +78,6 @@ public class DataLoader {
                         u1
                 ));
 
-                // alex -> andrei despre Mercedes
                 messageRepository.save(new Message(
                         "Accepti schimb?",
                         c3,
@@ -66,7 +85,6 @@ public class DataLoader {
                         u1
                 ));
 
-                // ion -> mihai despre Audi
                 messageRepository.save(new Message(
                         "Se poate negocia pretul?",
                         c2,
@@ -74,7 +92,6 @@ public class DataLoader {
                         u2
                 ));
 
-                // andrei -> alex despre Golf
                 messageRepository.save(new Message(
                         "Cati km are masina?",
                         c4,
@@ -82,7 +99,6 @@ public class DataLoader {
                         u3
                 ));
 
-                // mihai -> ion despre Skoda
                 messageRepository.save(new Message(
                         "Mai este valabil anuntul?",
                         c5,

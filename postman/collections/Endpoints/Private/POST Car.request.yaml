@@ -6,15 +6,15 @@ body:
   type: json
   content: "{\r
 
-    \  \"brand\": \"BMW\",\r
+    \  \"brand\": \"Mercedes\",\r
 
-    \  \"model\": \"X5\",\r
+    \  \"model\": \"W210\",\r
 
-    \  \"year\": 2020,\r
+    \  \"year\": 1995,\r
 
     \  \"price\": 35000,\r
 
-    \  \"sellerName\": \"Alex\",\r
+    \  \"sellerName\": \"Vlad\",\r
 
     \  \"description\": \"Masina impecabila\"\r
 
@@ -22,5 +22,5 @@ body:
 auth:
   type: bearer
   credentials:
-    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmRyZWkiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc3Njg0ODk1OSwiZXhwIjoxNzc2ODUyNTU5fQ.k_vI90FLKI5seRB7F3SxfjKtRZbio_eJ6D62nSYuQu4
+    token: "{{jwt}}"
 order: 3334463349749892

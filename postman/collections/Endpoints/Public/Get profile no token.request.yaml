@@ -2,4 +2,4 @@ $kind: http-request
 name: Get profile no token
 url: "{{baseGateway}}/gateway/private/profile"
 method: GET
-order: 1249921650843199
+order: 1056705920276610

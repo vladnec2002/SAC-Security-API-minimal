@@ -149,6 +149,8 @@ Important: acelasi secret trebuie folosit si in backend, si in gateway. Backend-
 
 ### 1. Deschide proiectul în IntelliJ
 
+Intri pe gradle tab si apesi pe download sources si sync all gradle projects
+
 - File → Open → selectează folderul proiectului
 - Așteaptă să se încarce Gradle
 
